@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { 
   Award, 
   Info, 
@@ -58,9 +58,16 @@ const ScrollIndicator = () => {
   const [activeSection, setActiveSection] = useState('');
   const isManualScrolling = useRef(false);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+  const isInitialMount = useRef(true);
 
-  // Only set up scroll detection after a longer delay to ensure page is fully loaded
+  // Only handle scroll events after the component has fully mounted and a delay has passed
   useEffect(() => {
+    // Skip auto-detection on initial render to prevent auto-scrolling
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
     // Wait for a significant delay before enabling scroll detection
     const initialDelay = setTimeout(() => {
       const handleScroll = () => {
@@ -85,15 +92,11 @@ const ScrollIndicator = () => {
         }
       };
   
+      // Only listen to scroll events, never trigger scrolling automatically
       window.addEventListener('scroll', handleScroll);
       
-      // Only run the initial check after a delay
-      setTimeout(() => {
-        handleScroll();
-      }, 1000);
-      
       return () => window.removeEventListener('scroll', handleScroll);
-    }, 1500); // Increased delay to prevent initial auto-scrolling
+    }, 2000); // Extended delay to ensure page is fully loaded and stable
     
     return () => clearTimeout(initialDelay);
   }, []);
@@ -107,7 +110,8 @@ const ScrollIndicator = () => {
     
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      // Use a more gentle scrolling behavior
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     
     // Reset the manual scrolling flag after animation completes

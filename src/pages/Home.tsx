@@ -34,7 +34,8 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Navbar />
-      <ScrollIndicator />
+      {/* Temporarily disable ScrollIndicator until we fix the auto-scroll issues */}
+      {/* <ScrollIndicator /> */}
       
       <main>
         <HeroSection />
