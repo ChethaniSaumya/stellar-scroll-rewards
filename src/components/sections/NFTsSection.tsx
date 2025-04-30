@@ -10,7 +10,7 @@ const NFTsSection = () => {
   ];
 
   return (
-    <section id="nfts" className="section overflow-hidden relative">
+    <div id="nfts" className="section overflow-hidden relative">
       <div className="absolute inset-0 z-0">
         <div className="absolute top-1/3 -right-20 w-96 h-96 bg-stellar-purple/20 rounded-full filter blur-3xl" />
       </div>
@@ -59,7 +59,7 @@ const NFTsSection = () => {
           </Button>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

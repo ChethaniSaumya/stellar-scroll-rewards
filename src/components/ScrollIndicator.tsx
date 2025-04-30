@@ -58,30 +58,36 @@ const ScrollIndicator = () => {
   const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight / 3;
-      
-      for (const section of sections) {
-        const element = document.getElementById(section.id);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          
-          if (
-            scrollPosition >= offsetTop &&
-            scrollPosition < offsetTop + offsetHeight
-          ) {
-            setActiveSection(section.id);
-            break;
+    // Wait a brief moment before setting up the scroll listener
+    // to prevent any initial auto-scrolling
+    const timeout = setTimeout(() => {
+      const handleScroll = () => {
+        const scrollPosition = window.scrollY + window.innerHeight / 3;
+        
+        for (const section of sections) {
+          const element = document.getElementById(section.id);
+          if (element) {
+            const { offsetTop, offsetHeight } = element;
+            
+            if (
+              scrollPosition >= offsetTop &&
+              scrollPosition < offsetTop + offsetHeight
+            ) {
+              setActiveSection(section.id);
+              break;
+            }
           }
         }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    // Initial check for active section
-    handleScroll();
+      };
+  
+      window.addEventListener('scroll', handleScroll);
+      // Initial check for active section
+      handleScroll();
+      
+      return () => window.removeEventListener('scroll', handleScroll);
+    }, 500); // Short delay to prevent initial auto-scrolling
     
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => clearTimeout(timeout);
   }, []);
 
   const scrollToSection = (id: string) => {
@@ -128,4 +134,3 @@ const ScrollIndicator = () => {
 };
 
 export default ScrollIndicator;
-
