@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import ScrollIndicator from '@/components/ScrollIndicator';
 import HeroSection from '@/components/sections/HeroSection';
@@ -13,9 +13,22 @@ import SocialsSection from '@/components/sections/SocialsSection';
 import Footer from '@/components/Footer';
 
 const Home = () => {
-  // Make sure we're always at the top of the page when the component mounts
-  useEffect(() => {
+  // Use useLayoutEffect to ensure scrolling happens before any rendering
+  useLayoutEffect(() => {
+    // Force scroll to top and prevent any auto-scrolling
     window.scrollTo(0, 0);
+    
+    // Disable any smooth scrolling temporarily
+    const html = document.documentElement;
+    const originalScrollBehavior = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
+    
+    // Restore original scroll behavior after a delay
+    const timer = setTimeout(() => {
+      html.style.scrollBehavior = originalScrollBehavior;
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   return (

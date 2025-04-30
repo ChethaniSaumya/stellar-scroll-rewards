@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { 
   Award, 
   Info, 
@@ -56,12 +56,17 @@ const sections: Section[] = [
 
 const ScrollIndicator = () => {
   const [activeSection, setActiveSection] = useState('');
+  const isManualScrolling = useRef(false);
+  const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  // Only set up scroll detection after a longer delay to ensure page is fully loaded
   useEffect(() => {
-    // Wait a brief moment before setting up the scroll listener
-    // to prevent any initial auto-scrolling
-    const timeout = setTimeout(() => {
+    // Wait for a significant delay before enabling scroll detection
+    const initialDelay = setTimeout(() => {
       const handleScroll = () => {
+        // Don't update active section if the user is manually scrolling
+        if (isManualScrolling.current) return;
+        
         const scrollPosition = window.scrollY + window.innerHeight / 3;
         
         for (const section of sections) {
@@ -81,20 +86,38 @@ const ScrollIndicator = () => {
       };
   
       window.addEventListener('scroll', handleScroll);
-      // Initial check for active section
-      handleScroll();
+      
+      // Only run the initial check after a delay
+      setTimeout(() => {
+        handleScroll();
+      }, 1000);
       
       return () => window.removeEventListener('scroll', handleScroll);
-    }, 500); // Short delay to prevent initial auto-scrolling
+    }, 1500); // Increased delay to prevent initial auto-scrolling
     
-    return () => clearTimeout(timeout);
+    return () => clearTimeout(initialDelay);
   }, []);
 
   const scrollToSection = (id: string) => {
+    // Prevent the scroll detection from updating during manual navigation
+    isManualScrolling.current = true;
+    
+    // Update active section immediately for better UX
+    setActiveSection(id);
+    
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+    
+    // Reset the manual scrolling flag after animation completes
+    if (scrollTimeout.current) {
+      clearTimeout(scrollTimeout.current);
+    }
+    
+    scrollTimeout.current = setTimeout(() => {
+      isManualScrolling.current = false;
+    }, 1000);
   };
 
   return (
