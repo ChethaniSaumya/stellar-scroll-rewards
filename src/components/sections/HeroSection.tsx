@@ -4,7 +4,8 @@ import { ArrowDownCircle, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const HeroSection = () => {
-  const scrollToRewards = () => {
+  const scrollToRewards = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
     const rewardsSection = document.getElementById('rewards');
     if (rewardsSection) {
       rewardsSection.scrollIntoView({ behavior: 'smooth' });
@@ -12,7 +13,7 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden pt-20">
+    <div id="hero" className="min-h-screen flex flex-col justify-center items-center relative overflow-hidden pt-20">
       {/* Background effects */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-1/4 -left-20 w-96 h-96 bg-stellar-purple/20 rounded-full filter blur-3xl" />
