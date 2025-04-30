@@ -116,7 +116,7 @@ const RoadmapSection = () => {
   }, [activeIndex]);
 
   return (
-    <section id="roadmap" className="section-padding overflow-hidden relative">
+    <div id="roadmap" className="section-padding overflow-hidden relative">
       {/* Background decorations */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute -top-20 -left-20 w-96 h-96 bg-stellar-purple/10 rounded-full blur-3xl opacity-40" />
@@ -379,14 +379,15 @@ const RoadmapSection = () => {
         </div>
       </div>
       
-      {/* Add a progress pulse animation to style */}
-      <style>
+      {/* Add a progress pulse animation */}
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes progress-pulse {
-          0%, 100% { opacity: 1; }
+          0% { opacity: 1; }
           50% { opacity: 0.7; }
+          100% { opacity: 1; }
         }
-      </style>
-    </section>
+      `}} />
+    </div>
   );
 };
 
