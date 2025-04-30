@@ -4,7 +4,7 @@ import { ArrowDownCircle, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const HeroSection = () => {
-  const scrollToRewards = (e: React.MouseEvent<HTMLElement>) => {
+  const scrollToRewards = (e: React.MouseEvent<SVGSVGElement | HTMLElement>) => {
     e.preventDefault();
     const rewardsSection = document.getElementById('rewards');
     if (rewardsSection) {

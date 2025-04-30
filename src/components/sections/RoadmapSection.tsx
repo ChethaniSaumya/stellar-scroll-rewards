@@ -380,12 +380,12 @@ const RoadmapSection = () => {
       </div>
       
       {/* Add a progress pulse animation to style */}
-      <style jsx>{`
+      <style>
         @keyframes progress-pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.7; }
         }
-      `}</style>
+      </style>
     </section>
   );
 };
